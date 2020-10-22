@@ -22,45 +22,39 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, "../public/index.html"))
 });
 
-app.listen(PORT, function() {
-    console.log("App listening on PORT", PORT);
-});
 
+//API ROUTES
 
-//API routes
 app.get("/api/notes", function(req, res) {
     res.json(db)
-        
 });
 
-var i = 1
-
 app.post("/api/notes", function(req, res) {
-
-    
-
-    req.body.id = i++
-
-
+    req.body.id = Date.now();
     db.push(req.body);
-    
-    console.log(req.body);
-    
-    
-    fs.writeFileSync("./db/db.json", JSON.stringify(db)); 
-
-   
+    fs.writeFileSync("./db/db.json", JSON.stringify(db));
     res.json(req.body);
 });
 
-
-app.delete("/api/notes/:id", function (req, res) {
-
-    db.splice(req.body.id, i);
-
-    fs.writeFileSync("./db/db.json", JSON.stringify(db, null, '\t'));
-    
-    res.status(200).end();
-
-
+app.delete("/api/notes/:id", function(req, res) {
+    var chosen = parseInt(req.params.id);
+    for (var i = 0; i < db.length; i++) {
+        if (chosen === db[i].id) {
+            console.log(db[i]);
+            db.splice(i, 1);
+            fs.writeFileSync("./db/db.json", JSON.stringify(db));
+            return res.status(200).end();
+        }
+    }
 });
+
+
+//Set the PORT up to listen
+app.listen(PORT, function() {
+    console.log("App listening on PORT", PORT);
+})
+
+
+
+
+
