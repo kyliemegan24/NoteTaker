@@ -15,7 +15,7 @@ app.use( express.static('public'));
 
 //HTML Routes
 app.get('/notes', function(req, res) {
-    res.sendFile(path.join(__dirname, "../public/notes.html"))
+    res.sendFile(path.join(__dirname, "../notetaker/public/notes.html"))
 });
 
 app.get('/', function(req, res) {
